@@ -1,3 +1,4 @@
+import { request } from '@/utils';
 import { createSlice } from '@reduxjs/toolkit';
 
 const userStore = createSlice({
@@ -9,7 +10,7 @@ const userStore = createSlice({
   //同步的修改方法
   reducers: {
     setToken(state, action) {
-      state.action = action.payload;
+      state.token = action.payload;
     },
   },
 });
@@ -20,6 +21,14 @@ const { setToken } = userStore.actions;
 //获取reducer函数
 const userReducer = userStore.reducer;
 
-export { setToken };
+//异步函数 完成登陆获取token
+
+const fetchLogin = (loginForm) => {
+  return async (dispatch) => {
+    const res = await request.post('/authorizations', loginForm);
+    dispatch(setToken(res.data.token));
+  };
+};
+export { fetchLogin, setToken };
 
 export default userReducer;
