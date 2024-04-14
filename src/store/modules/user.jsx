@@ -13,7 +13,7 @@ const userStore = createSlice({
     setToken(state, action) {
       state.token = action.payload;
       //save token in localstorage
-      _setToken(action.payload);
+      _setToken(state.token);
     },
   },
 });
