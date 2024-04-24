@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
 const Home = () => {
+  const chartRef = useRef(null);
   useEffect(() => {
     //确保dom可用
-    const chartDom = document.getElementById('main');
+    //const chartDom = document.getElementById('main');
+    const chartDom = chartRef.current;
     const myChart = echarts.init(chartDom);
     const option = {
       xAxis: {
@@ -26,7 +28,7 @@ const Home = () => {
   }, []);
   return (
     <div>
-      <div id='main' style={{ width: '500px', height: '400px' }}></div>
+      <div ref={chartRef} style={{ width: '500px', height: '400px' }}></div>
     </div>
   );
 };
