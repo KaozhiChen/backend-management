@@ -6,3 +6,12 @@ export function getChannelAPI() {
     method: 'GET',
   });
 }
+
+//public article
+export function createArticleAPI(data) {
+  return request({
+    url: '/mp/artcles?draft=false',
+    method: 'POST',
+    data,
+  });
+}
