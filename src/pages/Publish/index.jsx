@@ -43,6 +43,7 @@ const Publish = () => {
       channel_id,
       content,
       title,
+      type: coverType,
       cover: {
         type: coverType,
         images: imageList.map((item) => item.response.data.url),

@@ -10,7 +10,7 @@ export function getChannelAPI() {
 //public article
 export function createArticleAPI(data) {
   return request({
-    url: '/mp/artcles?draft=false',
+    url: '/mp/articles?draft=false',
     method: 'POST',
     data,
   });
