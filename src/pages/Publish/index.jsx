@@ -8,6 +8,7 @@ import {
   Upload,
   Space,
   Select,
+  message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -32,18 +33,19 @@ const Publish = () => {
     getChannelList();
   }, []);
 
+  //publish article
   const onFinish = async (formValue) => {
-    console.log(formValue);
+    if (coverType !== imageList.length)
+      return message.warning('封面类型和图片数量不匹配');
     const { title, content, channel_id } = formValue;
     //form data
     const formData = {
       channel_id,
       content,
       title,
-      type: 1,
       cover: {
-        type: 1,
-        images: [],
+        type: coverType,
+        images: imageList.map((item) => item.response.data.url),
       },
     };
     //submit form data
