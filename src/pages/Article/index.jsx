@@ -24,6 +24,12 @@ const Article = () => {
   //get channel list
   const { channelList } = useChannel();
 
+  //枚举定义文章状态
+  const status = {
+    1: <Tag color='warning'>待审核</Tag>,
+    2: <Tag color='green'>审核通过</Tag>,
+  };
+
   // 准备列数据
   const columns = [
     {
@@ -44,7 +50,13 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: (data) => <Tag color='green'>审核通过</Tag>,
+      //data是后端返回的status状态码； 1-待审核；2-审核通过
+      render: (data) => status[data],
+      // data === 1 ? (
+      //   <Tag color='warning'>待审核</Tag>
+      // ) : (
+      //   <Tag color='green'>审核通过</Tag>
+      // ),
     },
     {
       title: '发布时间',
