@@ -15,3 +15,12 @@ export function createArticleAPI(data) {
     data,
   });
 }
+
+//get article list API
+export function getArticleListAPI(params) {
+  return request({
+    url: '/mp/articles',
+    method: 'GET',
+    params,
+  });
+}
