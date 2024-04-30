@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Card,
   Breadcrumb,
@@ -30,6 +30,8 @@ const Article = () => {
     1: <Tag color='warning'>待审核</Tag>,
     2: <Tag color='green'>审核通过</Tag>,
   };
+
+  const navigate = useNavigate();
 
   // 准备列数据
   const columns = [
@@ -80,7 +82,12 @@ const Article = () => {
       render: (data) => {
         return (
           <Space size='middle'>
-            <Button type='primary' shape='circle' icon={<EditOutlined />} />
+            <Button
+              type='primary'
+              shape='circle'
+              icon={<EditOutlined />}
+              onClick={() => navigate(`/publish?id=${data.id}`)}
+            />
             <Popconfirm
               title='确认删除该条文章吗?'
               onConfirm={() => delArticle(data)}
@@ -161,7 +168,6 @@ const Article = () => {
 
   //删除
   const delArticle = async (data) => {
-    console.log('点击删除', data);
     await delArticleAPI(data.id);
     setReqData({
       ...reqData,
