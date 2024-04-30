@@ -11,12 +11,12 @@ import {
   message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import './index.scss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { useState } from 'react';
-import { createArticleAPI } from '@/apis/article';
+import { useEffect, useState } from 'react';
+import { createArticleAPI, getArticleById } from '@/apis/article';
 import { useChannel } from '@/hooks/useChannel';
 
 const { Option } = Select;
@@ -56,6 +56,21 @@ const Publish = () => {
     setCoverType(e.target.value);
   };
 
+  //回填数据
+  //get article's id via route
+  //获取form组件实例
+  const [form] = Form.useForm();
+  const [searchParams] = useSearchParams();
+  const articleId = searchParams.get('id');
+  console.log(articleId);
+  useEffect(() => {
+    async function getArticleDetail() {
+      const res = await getArticleById(articleId);
+      form.setFieldsValue(res.data);
+    }
+    getArticleDetail();
+  }, [articleId, form]);
+
   return (
     <div className='publish'>
       <Card
@@ -73,6 +88,7 @@ const Publish = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 0 }}
           onFinish={onFinish}
+          form={form}
         >
           <Form.Item
             label='标题'

@@ -32,3 +32,11 @@ export function delArticleAPI(id) {
     method: 'DELETE',
   });
 }
+
+//get article's details by ID
+export function getArticleById(id) {
+  return request({
+    url: `/mp/articles/${id}`,
+    //method: 'GET',
+  });
+}
