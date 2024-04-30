@@ -140,6 +140,17 @@ const Article = () => {
       end_pubdate: formValue.date[1].format('YYYY-MM-DD'),
     });
   };
+
+  //分页
+  const onPageChange = (curPage) => {
+    console.log(curPage);
+    //修改参数依赖项引发列表数据重新渲染
+    setReqData({
+      ...reqData,
+      page: curPage,
+    });
+  };
+
   return (
     <div>
       <Card
@@ -190,7 +201,16 @@ const Article = () => {
       </Card>
       {/*  表格  */}
       <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
-        <Table rowKey='id' columns={columns} dataSource={articleList} />
+        <Table
+          rowKey='id'
+          columns={columns}
+          dataSource={articleList}
+          pagination={{
+            total: count,
+            pageSize: reqData.per_page,
+            onChange: onPageChange,
+          }}
+        />
       </Card>
     </div>
   );
