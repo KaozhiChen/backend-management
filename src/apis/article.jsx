@@ -16,6 +16,15 @@ export function createArticleAPI(data) {
   });
 }
 
+//edit article
+export function editArticleAPI(data) {
+  return request({
+    url: `/mp/articles/${data.id}?draft=false`,
+    method: 'PUT',
+    data,
+  });
+}
+
 //get article list API
 export function getArticleListAPI(params) {
   return request({

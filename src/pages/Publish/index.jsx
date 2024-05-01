@@ -11,12 +11,16 @@ import {
   message,
 } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import './index.scss';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useEffect, useState } from 'react';
-import { createArticleAPI, getArticleById } from '@/apis/article';
+import {
+  createArticleAPI,
+  editArticleAPI,
+  getArticleById,
+} from '@/apis/article';
 import { useChannel } from '@/hooks/useChannel';
 
 const { Option } = Select;
@@ -24,6 +28,7 @@ const { Option } = Select;
 const Publish = () => {
   //获取频道列表
   const { channelList } = useChannel();
+  const navigate = useNavigate();
 
   //publish article
   const onFinish = async (formValue) => {
@@ -38,11 +43,26 @@ const Publish = () => {
       type: coverType,
       cover: {
         type: coverType,
-        images: imageList.map((item) => item.response.data.url),
+        images: imageList.map((item) => {
+          if (item.response) {
+            return item.response.data.url;
+          } else {
+            return item.url;
+          }
+        }),
       },
     };
+
     //submit form data
-    await createArticleAPI(formData);
+    if (articleId) {
+      //edit API
+      await editArticleAPI({ ...formData, id: articleId });
+      message.success('提交成功');
+      navigate('/article');
+    } else {
+      //create new article API
+      await createArticleAPI(formData);
+    }
   };
 
   //upload image
@@ -52,7 +72,6 @@ const Publish = () => {
   };
   const [coverType, setCoverType] = useState(0);
   const onTypeChange = (e) => {
-    console.log('切换封面了', e.target.value);
     setCoverType(e.target.value);
   };
 
@@ -62,7 +81,6 @@ const Publish = () => {
   const [form] = Form.useForm();
   const [searchParams] = useSearchParams();
   const articleId = searchParams.get('id');
-  console.log(articleId);
   useEffect(() => {
     async function getArticleDetail() {
       const res = await getArticleById(articleId);
@@ -82,7 +100,9 @@ const Publish = () => {
         })
       );
     }
-    getArticleDetail();
+    if (articleId) {
+      getArticleDetail();
+    }
   }, [articleId, form]);
 
   return (
@@ -92,7 +112,7 @@ const Publish = () => {
           <Breadcrumb
             items={[
               { title: <Link to={'/'}>首页</Link> },
-              { title: '发布文章' },
+              { title: articleId ? '编辑文章' : '发布文章' },
             ]}
           />
         }
