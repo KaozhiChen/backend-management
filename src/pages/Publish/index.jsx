@@ -66,7 +66,21 @@ const Publish = () => {
   useEffect(() => {
     async function getArticleDetail() {
       const res = await getArticleById(articleId);
-      form.setFieldsValue(res.data);
+      const data = res.data;
+      const { cover } = data;
+      form.setFieldsValue({
+        ...data,
+        type: cover.type,
+      });
+
+      //回填图片列表
+      setCoverType(cover.type);
+      //显示图片({url:url})
+      setImageList(
+        cover.images.map((url) => {
+          return { url };
+        })
+      );
     }
     getArticleDetail();
   }, [articleId, form]);
@@ -126,6 +140,7 @@ const Publish = () => {
                 action={'http://geek.itheima.net/v1_0/upload'}
                 onChange={onUploadChange}
                 maxCount={coverType}
+                fileList={imageList}
               >
                 <div style={{ marginTop: 8 }}>
                   <PlusOutlined />
